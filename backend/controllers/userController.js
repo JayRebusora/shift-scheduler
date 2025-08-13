@@ -5,14 +5,14 @@ import User from "../models/User.js";
 // @route POST /api/usrs
 export const createUser = async (req, res) => {
     try {
-        const { name, email, phone, role} = req.body;
+        const { name, email, phone, role, position} = req.body;
 
         // Simple phone validation
         const phoneRegex = /^\+?[1-9]\d{1,14}$/; //E.164 format
         if (!phoneRegex.test(phone)) {
             return res.status(400).json({message: "Invalid phone number format"});
         }
-        const user = await User.create({name, email, phone, role});
+        const user = await User.create({name, email, phone, role, position});
         res.status(201).json(user);
     } catch (error) {
         res.status(500).json({message: error.message});
