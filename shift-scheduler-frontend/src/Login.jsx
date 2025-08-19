@@ -1,65 +1,61 @@
-import {useState} from "react"
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
 
-export default function Login(){
-    const [formData, setFormData] = useState({
-        email:"",
-        password:"",
-    });
-
-    const [showPassword, setShowPassword] = useState(false);
-
-    const handleChange = (e) => {
-        setFormData((prev) => ({
-            ...prev,
-            [e.target.name]: e.target.value,
-        }));
-    };
+export default function Login() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [role, setRole] = useState("");
+    const navigate = useNavigate();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Login data:", formData);
+
+        if (!role) {
+            alert("Please select a role");
+            return;
+        }
+        if (role === "admin") navigate("/admin")
+            if (role === "client") navigate("/client")
+                if (role === "employee") navigate("/employee")
     };
 
-    
     return (
-        <div className="max-w-md mx-auto mt-16 p-6 bg-white rounded shadow">
-            <h2 className="text-2xl font-bold mb-6 text-center">Login</h2>
-            <form onSubmit={handleSubmit}>
+        <>
+        <Navbar />
+        <div className="min-h-screen flex justify-center items-center bg-gray-100">
+            <form onSubmit={handleSubmit}
+            className="bg-white p-6 rounded-xl shadow-lg w-80">
+                <h2 className="text-xl font-bold mb-4">Login</h2>
                 <input 
-                type="email" 
-                name="email"
+                type="text" 
                 placeholder="Email"
-                value={formData.email}
-                className="w-full border border-gray-300 p-2 rounded"
-                onChange={handleChange}
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
                 />
-                <div className="relative mb-4">
-                <input 
-                type={showPassword ? "text" : "password"} 
-                name="password"
-                placeholder="password"
-                value={formData.password}
-                className="w-full border border-gray-300 p-2 pr-16 rounded"
-                onChange={handleChange}
+                <input
+                type="password" 
+                placeholder="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 required
                 />
-                <button 
-                type="button"
-                className="absolute inset-y-0 right-0 px-3 text-gray-500"
-                onClick={() => setShowPassword((prev) => !prev)}
+                <select 
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+                required
                 >
-                  {showPassword ? "Hide" : "Show"}  
-                </button>
-                </div>
-
-                <button
-                type="submit"
-                className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
-                >
+                   <option value="">Select Role</option> 
+                   <option value="admin">Admin</option>
+                   <option value="client">Client</option>
+                   <option value="employee">Employee</option>
+                </select>
+                <button type="submit" className="w-full bg-blue-600 texxt-white py-2 rounded hover:bg-blue-700">
                     Login
                 </button>
             </form>
         </div>
+        </>
     );
 }

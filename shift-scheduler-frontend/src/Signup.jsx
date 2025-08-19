@@ -1,4 +1,5 @@
 import {useState} from "react";
+import Navbar from "./Navbar";
 
 export default function Signup() {
     const [formData, setFormData] = useState({
@@ -23,6 +24,10 @@ export default function Signup() {
     };
 
     return (
+        <>
+        <div>
+            <Navbar />
+        </div>
         <div className="max-w-md mx-auto mt-16 p-6 bg-white rounded shadow">
             <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -95,5 +100,6 @@ export default function Signup() {
                 </button>
             </form>
         </div>
+        </>
     );
 }
