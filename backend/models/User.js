@@ -12,27 +12,39 @@ const userSchema = new mongoose.Schema({
         unique: true,
         lowercase: true,
     },
+    password: {
+        type: String,
+        required: true,
+    },
     phone: {
         type: String,
         required: true,
         validate: {
-            validator: function(v) {
-                //Simple US phone number regex (e.g., 123-456-7890 or (123) 456-7890)
-                return /^(\+1)?\s?(\(\d{3}\)|\d{3})[-.\s]?\d{3}[-.\s]?\d{4}$/.test(v);
+            validator: function (v) {
+                // E.164 format validation (+1234567890)
+                return /^\+?[1-9]\d{1,14}$/.test(v);
             },
-            message: props => `${props.value} is not a valid phone number!`
-        }
-    }, 
+            message: (props) => `${props.value} is not a valid phone number!`,
+        },
+    },
     role: {
         type: String,
-        enum: ['Employee', 'Admin', 'Client'],
-        default: 'Employee',
+        enum: ["employee", "admin", "client"],
+        default: "employee",
     },
     position: {
         type: String,
-        enum: ['Nurse', 'STNA', 'other'],
+        enum: ["Nurse", "STNA", "Other"],
+        validate: {
+            validator: function(v) {
+                // Only validate if role is Employee
+                if (this.role !== 'employee') return true;
+                return ['Nurse', 'STNA', 'Other'].includes(v);
+            },
+            message: props => `${props.value} is not a valid position for an Employee!`
+        },
         required: function() {
-            return this.role === 'Employee'; //Position required only if role is Employee.
+            return this.role === "employee"; // Position required only if role is Employee
         },
     },
     createdAt: {
@@ -41,5 +53,5 @@ const userSchema = new mongoose.Schema({
     },
 });
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model("User", userSchema);
 export default User;
