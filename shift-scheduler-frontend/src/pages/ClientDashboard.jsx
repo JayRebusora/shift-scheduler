@@ -1,0 +1,8 @@
+export default function ClientDashboard() {
+    return (
+        <div className="p-6">
+            <h1 className="text-2xl font-bold">Client / Facility Dashboard</h1>
+            <p>Welcome, Facility! You can post shifts and view assigned staff here.</p>
+        </div>
+    );
+}
