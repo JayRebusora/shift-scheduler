@@ -1,5 +1,6 @@
 import {useState} from "react";
 import Navbar from "./Navbar";
+import { signupUser } from "./api/userApi";
 
 export default function Signup() {
     const [formData, setFormData] = useState({
@@ -11,6 +12,9 @@ export default function Signup() {
         password: "",
     });
 
+    const [error, setError] = useState(""); //For error messages
+    const [success, setSuccess] = useState(""); //For success messages
+
     const handleChange = (e) => {
         setFormData((prev) => ({
             ...prev,
@@ -18,9 +22,22 @@ export default function Signup() {
         }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Signup data:", formData);
+        setError("");
+        setSuccess("");
+        try{
+            // Preapre data: only include position if Employee
+            const dataToSend = { ...formData};
+            if (formData.role !== "Employee") {
+                delete dataToSend.position;
+            }
+            const data = await signupUser(dataToSend);
+            setSuccess(`Signup successful! Welcome, ${data.user.name}`);
+            localStorage.setItem('token', data.token); //store token for authentication
+        } catch (err) {
+            setError(err.message || "Signup failed. Please try again.");
+        }
     };
 
     return (
@@ -30,6 +47,21 @@ export default function Signup() {
         </div>
         <div className="max-w-md mx-auto mt-16 p-6 bg-white rounded shadow">
             <h2 className="text-2xl font-bold mb-6 text-center">Sign Up</h2>
+
+            {/* Error Message*/}
+            {error && (
+                <p className="mb-4 text-red-600 text-center font-medium">
+                    {error}
+                    </p>
+            )}
+
+            {/* Success Message*/}
+            {success && (
+                <p className="mb-4 text-green-600 text-center font-medium">
+                    {success}
+                </p>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-4">
                 <input 
                 type="text" 
