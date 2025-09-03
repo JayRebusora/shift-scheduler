@@ -31,3 +31,23 @@ export const loginUser = async (formData) => {
     }
     return data; // { user, token}
 };
+
+//fetch users
+export const fetchUsers = async () => {
+    const res = await fetch("http://localhost:5000/api/users");
+    return await res.json();
+};
+
+export const deleteUser = async (id) => {
+    const res = await fetch(`http://localhost:5000/api/users/${id}`, {method: "DELETE"});
+    return await res.json();
+};
+
+export const updateUser = async (id, data) => {
+    const res = await fetch(`http://localhost:5000/api/users/${id}`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(data),
+    });
+    return await res.json();
+};

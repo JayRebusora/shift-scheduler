@@ -17,7 +17,7 @@ export default function DashboardLayout() {
         localStorage.removeItem("user");
 
         //Redirect to home
-        navigate("/");
+        navigate("/home");
     };
 
 
@@ -49,7 +49,7 @@ export default function DashboardLayout() {
             <div className="flex-1 flex flex-col">
                 <header className="bg-white border-b border-gray-300 p-4 flex justify-between items-center">
                     <div>
-                        <Link to="/" className="text-blue-600 font-semibold hover:underline">Home</Link>
+                        <Link to="#/" className="text-blue-600 font-semibold hover:underline">Home</Link>
                     </div>
                     <div className="flex items-center gap-4">
                         <span className="font-medium">Hi, {user.name}</span>
