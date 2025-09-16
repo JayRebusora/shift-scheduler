@@ -6,6 +6,7 @@ import DashboardLayout from "./components/DashboardLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import ManageEmployees from "./pages/ManageEmployees";
+import ShiftsPage from "./pages/ShiftsPage";
 
 function Placeholder({ title }) {
   return <h1 className="text-2xl font-bold">{title}</h1>;
@@ -44,7 +45,7 @@ export default function App() {
         <Route element={<ProtectedRoute allowedRoles={["client"]} />}>
           <Route path="/client" element={<DashboardLayout />}>
             <Route index element={<Placeholder title="Client Dashboard" />} />
-            <Route path="shifts" element={<Placeholder title="Shifts" />} />
+            <Route path="shifts" element={<ShiftsPage/>} />
             <Route path="staff-schedule" element={<Placeholder title="Staff Schedule" />} />
             <Route path="reports" element={<Placeholder title="Reports" />} />
             <Route path="messages" element={<Placeholder title="Messages" />} />
