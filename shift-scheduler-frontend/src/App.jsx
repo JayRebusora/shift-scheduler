@@ -7,12 +7,18 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import PublicRoute from "./components/PublicRoute";
 import ManageEmployees from "./pages/ManageEmployees";
 import ShiftsPage from "./pages/ShiftsPage";
+import AdminShifts from "./pages/AdminShifts";
+import EmployeeScheduling from "./pages/EmployeeScheduling";
+
 
 function Placeholder({ title }) {
   return <h1 className="text-2xl font-bold">{title}</h1>;
 }
 
 export default function App() {
+
+  const userId = localStorage.getItem("userId");
+
   return (
     <Router>
       <Routes>
@@ -31,7 +37,7 @@ export default function App() {
           <Route path="/admin" element={<DashboardLayout />}>
             <Route index element={<Placeholder title="Admin Dashboard" />} />
             <Route path="manage-employee" element={<ManageEmployees />} />
-            <Route path="shifts" element={<Placeholder title="Shifts" />} />
+            <Route path="shifts" element={<AdminShifts />} />
             <Route path="staff-schedule" element={<Placeholder title="Staff Schedule" />} />
             <Route path="credentialing" element={<Placeholder title="Credentialing" />} />
             <Route path="reports" element={<Placeholder title="Reports" />} />
@@ -60,7 +66,8 @@ export default function App() {
             <Route index element={<Placeholder title="Employee Dashboard" />} />
             <Route path="profile" element={<Placeholder title="My Profile" />} />
             <Route path="credentials" element={<Placeholder title="My Credentials" />} />
-            <Route path="scheduling" element={<Placeholder title="Scheduling" />} />
+            <Route 
+            path="scheduling" element={<EmployeeScheduling employeeId={userId}/>} />
             <Route path="shift-request" element={<Placeholder title="Shift Request" />} />
             <Route path="messages" element={<Placeholder title="Messages" />} />
             <Route path="notifications" element={<Placeholder title="Notifications" />} />
