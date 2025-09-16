@@ -27,6 +27,11 @@ const shiftSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
+        status: {
+            type: String,
+            enum: ["unassigned", "assigned", "accepted", "declined"],
+            default: "unassigned"
+        }
     },
     {timestamps: true}
 );

@@ -4,7 +4,11 @@ import {
     getShifts,
     updateShift,
     deleteShift,
-    publishShift 
+    publishShift, 
+    assignShift,
+    unassignShift,
+    respondToShift,
+    getAssignedShifts
 } from "../controllers/shiftController.js";
 
 
@@ -24,5 +28,18 @@ router.delete("/:id", deleteShift);
 
 //Publish (optional separate route)
 router.put("/:id/publish", publishShift);
+
+//Assign shift
+router.put("/:id/assign", assignShift);
+
+//Unassign Shift
+router.put("/:id/unassign", unassignShift);
+
+//Respond to Shift
+router.put("/:id/respond", respondToShift);
+
+//Get assigned shifts
+router.get("/assigned", getAssignedShifts);
+
 
 export default router;

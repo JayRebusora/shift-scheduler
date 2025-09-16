@@ -80,3 +80,84 @@ export const publishShift = async (req, res) => {
         res.status(500).json({message: err.message});
     }
 };
+
+//Assign Shift
+export const assignShift = async (req, res) => {
+    const {id} = req.params;
+    const {employeeId} = req.body;
+
+    try {
+        const shift = await Shift.findByIdAndUpdate(
+            id,
+            {assignedTo: employeeId},
+            {new: true}
+        ).populate("assignedTo", "name");
+
+        if (!shift) {
+            return res.status(404).json({message:"Shift not found"});
+    }
+        res.json({message: "Shift assigned successfully", shift});
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
+};
+
+//Unassign a shift
+export const unassignShift = async (req, res) => {
+    const {id} = req.params;
+    try {
+        const shift = await Shift.findByIdAndUpdate(
+            id,
+            {assignedTo: null, status: "unassigned"},
+            {new: true}
+        );
+        if (!shift) return res.status(404).json({message: "Shift not found"});
+        res.json({message: "Shift unassigned", shift});
+    } catch (err) {
+        res.status(500).json({message: err.message});
+    }
+};
+
+// Employee respond to assigned shift
+export const respondToShift = async (req, res) => {
+  const { id } = req.params;
+  const { action } = req.body; // "accepted" or "declined"
+
+  if (!["accepted", "declined"].includes(action)) {
+    return res.status(400).json({ message: "Invalid action" });
+  }
+
+  try {
+    const shift = await Shift.findById(id);
+    if (!shift) return res.status(404).json({ message: "Shift not found" });
+
+    // Check if shift is assigned to an employee
+    if (!shift.assignedTo) {
+      return res.status(400).json({ message: "Shift is not assigned to any employee" });
+    }
+
+    shift.status = action;
+    await shift.save();
+
+    res.json({ message: `Shift ${action} successfully`, shift });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+// Get shifts assigned to a specific employee
+export const getAssignedShifts = async (req, res) => {
+  const { employeeId } = req.query; // received from frontend
+
+  if (!employeeId) return res.status(400).json({ message: "employeeId is required" });
+
+  try {
+    const shifts = await Shift.find({ assignedTo: employeeId })
+      .populate("createdBy", "name")
+      .populate("assignedTo", "name");
+    res.json(shifts);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
