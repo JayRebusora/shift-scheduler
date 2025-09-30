@@ -8,12 +8,14 @@ export default function AdminShifts() {
   const [selectedUser, setSelectedUser] = useState({});
   const [toast, setToast] = useState(null);
 
+  const API_URL = import.meta.env.VITE_API_URL; // backend URL
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const [shiftRes, userRes] = await Promise.all([
-          fetch("http://localhost:5000/api/shifts?status=published"),
-          fetch("http://localhost:5000/api/users"),
+          fetch(`${API_URL}/shifts?status=published`),
+          fetch(`${API_URL}/users`),
         ]);
         const [shiftData, userData] = await Promise.all([shiftRes.json(), userRes.json()]);
         setShifts(shiftData);
@@ -25,7 +27,7 @@ export default function AdminShifts() {
       }
     };
     fetchData();
-  }, []);
+  }, [API_URL]);
 
   const handleAssign = async (shiftId) => {
     const employeeId = selectedUser[shiftId];
@@ -35,13 +37,13 @@ export default function AdminShifts() {
     }
 
     try {
-      await fetch(`http://localhost:5000/api/shifts/${shiftId}/assign`, {
+      await fetch(`${API_URL}/shifts/${shiftId}/assign`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId }),
       });
 
-      const res = await fetch("http://localhost:5000/api/shifts?status=published");
+      const res = await fetch(`${API_URL}/shifts?status=published`);
       const data = await res.json();
       setShifts(data);
       setSelectedUser((prev) => ({ ...prev, [shiftId]: "" }));
@@ -54,13 +56,13 @@ export default function AdminShifts() {
 
   const handleUnassign = async (shiftId) => {
     try {
-      await fetch(`http://localhost:5000/api/shifts/${shiftId}/assign`, {
+      await fetch(`${API_URL}/shifts/${shiftId}/assign`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId: null }),
       });
 
-      const res = await fetch("http://localhost:5000/api/shifts?status=published");
+      const res = await fetch(`${API_URL}/shifts?status=published`);
       const data = await res.json();
       setShifts(data);
       setToast({ message: "Shift unassigned successfully!", type: "success" });

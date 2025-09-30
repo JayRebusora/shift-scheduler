@@ -1,77 +1,76 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function ShiftForm({refreshShifts, selectedShift, closeModal}) {
-    const [formData, setFormData] = useState({
-        title: "",
-        date: "",
-        startTime: "",
-        endTime: "",
-        roleNeeded: "",
-        location: "",
-});
+export default function ShiftForm({ refreshShifts, selectedShift, closeModal }) {
+  const [formData, setFormData] = useState({
+    title: "",
+    date: "",
+    startTime: "",
+    endTime: "",
+    roleNeeded: "",
+    location: "",
+  });
 
-const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("");
+  const API_URL = import.meta.env.VITE_API_URL; // backend URL
 
-//Pre-fill form if editing
-useEffect(() => {
+  // Pre-fill form if editing
+  useEffect(() => {
     if (selectedShift) {
-        setFormData({
-            title: selectedShift.title,
-            date: selectedShift.date.split("T")[0], //format for input[type-date] 
-            startTime: selectedShift.startTime,
-            endTime: selectedShift.endTime,
-            roleNeeded: selectedShift.roleNeeded,
-            location: selectedShift.location,
-        });
+      setFormData({
+        title: selectedShift.title,
+        date: selectedShift.date.split("T")[0], // format for input[type=date]
+        startTime: selectedShift.startTime,
+        endTime: selectedShift.endTime,
+        roleNeeded: selectedShift.roleNeeded,
+        location: selectedShift.location,
+      });
     }
-}, [selectedShift]);
+  }, [selectedShift]);
 
-const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value}));
-};
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-        if (selectedShift) {
-            //Edit Mode
-            await axios.put(
-                `http://localhost:5000/api/shifts/${selectedShift._id}`,
-                formData
-            );
-            setMessage("Shift udpated successfully!");
-            if (closeModal) closeModal(); //close the modal after edit
-        }else {
-            //create mode
-            await axios.post("http://localhost:5000/api/shifts", formData);
-            setMessage("Shift created successfully!");
-        }
-        // Clear form for create mode
-        if (!selectedShift) {
-            setFormData({
-                title: "",
-                date: "",
-                startTime: "",
-                endTime: "",
-                roleNeeded: "",
-                location: "",
+      if (selectedShift) {
+        // Edit mode
+        await axios.put(`${API_URL}/shifts/${selectedShift._id}`, formData);
+        setMessage("Shift updated successfully!");
+        if (closeModal) closeModal();
+      } else {
+        // Create mode
+        await axios.post(`${API_URL}/shifts`, formData);
+        setMessage("Shift created successfully!");
+      }
 
-            });
-        }
-        //Refresh the shift list
-        if (refreshShifts) refreshShifts();
+      // Clear form for create mode
+      if (!selectedShift) {
+        setFormData({
+          title: "",
+          date: "",
+          startTime: "",
+          endTime: "",
+          roleNeeded: "",
+          location: "",
+        });
+      }
 
-        //clear message after 3 seconds
-        setTimeout(() => setMessage(""), 3000);
-    }catch (err) {
-        console.error(err);
-        setMessage("Failed to submit shift");
-        setTimeout(() => setMessage(""), 3000);
+      // Refresh the shift list
+      if (refreshShifts) refreshShifts();
+
+      // Clear message after 3 seconds
+      setTimeout(() => setMessage(""), 3000);
+    } catch (err) {
+      console.error(err);
+      setMessage("Failed to submit shift");
+      setTimeout(() => setMessage(""), 3000);
     }
-};
+  };
 
-return (
+  return (
     <div className={`${selectedShift ? "" : "max-w-md mx-auto mt-10 p-6 border rounded shadow"}`}>
       <form onSubmit={handleSubmit} className="flex flex-col gap-3">
         <input
@@ -136,5 +135,5 @@ return (
       </form>
       {message && <p className="mt-4 text-green-600">{message}</p>}
     </div>
-);
+  );
 }

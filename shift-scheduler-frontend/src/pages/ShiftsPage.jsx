@@ -10,10 +10,12 @@ export default function ShiftsPage() {
   const [editingShift, setEditingShift] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const API_URL = import.meta.env.VITE_API_URL; // backend URL
+
   // Fetch all shifts
   const fetchShifts = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/shifts");
+      const res = await axios.get(`${API_URL}/shifts`);
       setShifts(res.data);
     } catch (err) {
       console.error(err);
@@ -23,12 +25,12 @@ export default function ShiftsPage() {
 
   useEffect(() => {
     fetchShifts();
-  }, []);
+  }, [API_URL]);
 
   // Delete a shift
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:5000/api/shifts/${id}`);
+      await axios.delete(`${API_URL}/shifts/${id}`);
       setShifts(shifts.filter((shift) => shift._id !== id));
       setMessage("Shift deleted successfully");
     } catch (err) {
@@ -40,7 +42,7 @@ export default function ShiftsPage() {
   // Publish a shift
   const handlePublish = async (id) => {
     try {
-      const res = await axios.put(`http://localhost:5000/api/shifts/${id}/publish`);
+      const res = await axios.put(`${API_URL}/shifts/${id}/publish`);
       setShifts(shifts.map((shift) => (shift._id === id ? res.data : shift)));
       setMessage("Shift published successfully");
     } catch (err) {

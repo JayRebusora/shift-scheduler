@@ -7,12 +7,13 @@ export default function EmployeeCalendar() {
   const [shifts, setShifts] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [toast, setToast] = useState(null);
-  const employeeId = "64f11def987654321abcdef0"; // replace with logged-in employee id
+  const employeeId = localStorage.getItem("userId"); // get logged-in employee ID
+  const API_URL = import.meta.env.VITE_API_URL; // backend URL
 
   useEffect(() => {
     const fetchShifts = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/shifts`);
+        const res = await fetch(`${API_URL}/shifts`);
         const data = await res.json();
         const assignedShifts = data.filter(
           (shift) => shift.assignedTo?._id === employeeId
@@ -20,17 +21,18 @@ export default function EmployeeCalendar() {
         setShifts(assignedShifts);
       } catch (err) {
         console.error(err);
+        setToast({ message: "Failed to load shifts", type: "error" });
       }
     };
     fetchShifts();
-  }, []);
+  }, [employeeId, API_URL]);
 
   const handleResponse = async (shiftId, action) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/shifts/${shiftId}/respond`, {
+      const res = await fetch(`${API_URL}/shifts/${shiftId}/respond`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action }),
+        body: JSON.stringify({ response: action }), // must match backend field name
       });
       const data = await res.json();
 
@@ -50,7 +52,6 @@ export default function EmployeeCalendar() {
     }
   };
 
-  // Filter shifts for the selected date
   const shiftsForDate = shifts.filter(
     (shift) =>
       new Date(shift.date).toDateString() === selectedDate.toDateString()
@@ -63,8 +64,7 @@ export default function EmployeeCalendar() {
       <Calendar
         value={selectedDate}
         onChange={setSelectedDate}
-        tileContent={({ date, view }) => {
-          // Show shift titles on the calendar
+        tileContent={({ date }) => {
           const dayShifts = shifts.filter(
             (shift) => new Date(shift.date).toDateString() === date.toDateString()
           );
@@ -106,7 +106,7 @@ export default function EmployeeCalendar() {
                 </td>
                 <td className="border px-4 py-2 capitalize">{shift.status}</td>
                 <td className="border px-4 py-2">
-                  {shift.status === "assign" ? (
+                  {shift.status === "assigned" ? (
                     <div className="flex gap-2">
                       <button
                         className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600"
