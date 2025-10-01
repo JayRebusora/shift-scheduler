@@ -13,12 +13,24 @@ dotenv.config();
 connectDB();
 
 const app = express();
-
+const allowedOrigins = [
+    "https://shift-scheduler-delta.vercel.app",
+    "https://shift-scheduler-git-main-jays-projects-66051bf3.vercel.app"
+];
 //Middleware
 app.use(cors({
-    origin: ["https://shift-scheduler-delta.vercel.app"],
-    credentials:true,
+  origin: function(origin, callback){
+    // allow requests with no origin (like mobile apps or curl)
+    if(!origin) return callback(null, true);
+    if(allowedOrigins.indexOf(origin) === -1){
+      const msg = `The CORS policy for this site does not allow access from the specified Origin.`;
+      return callback(new Error(msg), false);
+    }
+    return callback(null, true);
+  },
+  credentials: true
 }));
+
 app.use(express.json());
 
 //Test root route
