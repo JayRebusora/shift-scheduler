@@ -16,7 +16,9 @@ export const createShift = async (req, res) => {
       endTime,
       roleNeeded,
       location,
-      createdBy
+      createdBy,
+      status: "unassigned",
+      isPublished: false,
     });
 
     res.status(201).json(newShift);
@@ -136,8 +138,13 @@ export const respondToShift = async (req, res) => {
       return res.status(400).json({ message: "Shift is not assigned to any employee" });
     }
 
-    shift.status = action;
-    await shift.save();
+    if (action === "declined") {
+      shift.assignedTo=null;
+      shift.status = "unassigned";
+    } else if (action === "accepted") {
+      shift.status = "accepted";
+    }
+      await shift.save();
 
     res.json({ message: `Shift ${action} successfully`, shift });
   } catch (err) {
