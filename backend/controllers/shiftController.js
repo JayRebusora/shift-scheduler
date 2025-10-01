@@ -145,6 +145,7 @@ export const respondToShift = async (req, res) => {
       shift.status = "accepted";
     }
       await shift.save();
+      await shift.populate("assignedTo", "name");
 
     res.json({ message: `Shift ${action} successfully`, shift });
   } catch (err) {
