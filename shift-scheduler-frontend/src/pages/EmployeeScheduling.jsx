@@ -65,6 +65,7 @@ export default function EmployeeScheduling({ employeeId }) {
               <th className="border px-2">Title</th>
               <th className="border px-2">Date</th>
               <th className="border px-2">Time</th>
+              <th className="border px-2">Location</th>
               <th className="border px-2">Status</th>
               <th className="border px-2">Action</th>
             </tr>
@@ -75,6 +76,7 @@ export default function EmployeeScheduling({ employeeId }) {
                 <td className="border px-2">{shift.title}</td>
                 <td className="border px-2">{new Date(shift.date).toLocaleDateString()}</td>
                 <td className="border px-2">{shift.startTime} - {shift.endTime}</td>
+                <td className="border px-2">{shift.location}</td>
                 <td className="border px-2">{shift.status}</td>
                 <td className="border px-2 flex gap-2">
                   {shift.assignedTo?._id === employeeId && shift.status === "assigned" && (
