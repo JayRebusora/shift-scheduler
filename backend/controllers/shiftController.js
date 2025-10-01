@@ -89,7 +89,7 @@ export const assignShift = async (req, res) => {
     try {
         const shift = await Shift.findByIdAndUpdate(
             id,
-            {assignedTo: employeeId},
+            {assignedTo: employeeId, status:"assigned"},
             {new: true}
         ).populate("assignedTo", "name");
 
