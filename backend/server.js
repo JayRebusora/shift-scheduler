@@ -16,7 +16,7 @@ const app = express();
 
 //Middleware
 app.use(cors({
-    origin: ["https://shift-scheduler-delta.vercel.app/"],
+    origin: ["https://shift-scheduler-delta.vercel.app"],
     credentials:true,
 }));
 app.use(express.json());
