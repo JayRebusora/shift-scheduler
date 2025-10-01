@@ -43,7 +43,7 @@ export default function EmployeeScheduling({ employeeId }) {
       const data = await res.json();
       console.log("Response from respond API:", data);
 
-      setShifts(shifts.map(s => s._id === shiftId ? data.shift : s));
+      setShifts(prev => prev.map(s => s._id === shiftId ? data.shift : s));
       setToast({ message: data.message, type: "success" });
     } catch (err) {
       console.error("Failed to respond to shift:", err);
