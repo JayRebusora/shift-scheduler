@@ -77,7 +77,7 @@ export default function EmployeeScheduling({ employeeId }) {
                 <td className="border px-2">{shift.startTime} - {shift.endTime}</td>
                 <td className="border px-2">{shift.status}</td>
                 <td className="border px-2 flex gap-2">
-                  {shift.status === "unassigned" && (
+                  {shift.assignedTo?._id === employeeId && shift.status === "assigned" && (
                     <>
                       <button className="bg-green-500 text-white px-2 py-1 rounded" onClick={() => handleRespond(shift._id, "accepted")}>
                         Accept
