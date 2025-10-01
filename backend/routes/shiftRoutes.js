@@ -17,6 +17,9 @@ const router = express.Router();
 //create
 router.post("/", createShift);
 
+//Get assigned shifts
+router.get("/assigned", getAssignedShifts);
+
 //read
 router.get("/", getShifts);
 
@@ -38,8 +41,7 @@ router.put("/:id/unassign", unassignShift);
 //Respond to Shift
 router.put("/:id/respond", respondToShift);
 
-//Get assigned shifts
-router.get("/assigned", getAssignedShifts);
+
 
 
 export default router;

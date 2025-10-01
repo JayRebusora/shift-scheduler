@@ -8,11 +8,6 @@ const shiftSchema = new mongoose.Schema(
         endTime: {type: String, required: true},
         roleNeeded: {type: String, required: true},
         location: {type: String, required: true},
-        status: {
-            type: String,
-            enum:["unassigned", "assign"],
-            default: "unassigned"
-        },
         createdBy: {
             type: mongoose.Schema.Types.ObjectId,
             ref:"User",

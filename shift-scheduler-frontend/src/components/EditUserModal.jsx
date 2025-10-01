@@ -29,7 +29,7 @@ export default function EditUserModal({user, onClose, onUpdate}) {
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-            <div className="bg-white p-6 rounde w-96 shadow-lg">
+            <div className="bg-white p-6 rounded w-96 shadow-lg">
                 <h3 className="text-lg font-bold mb-4">Edit Employee</h3>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-2">
                     <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" className="border p-2 rounded" />
