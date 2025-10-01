@@ -58,7 +58,7 @@ export default function AdminShifts() {
 
   const handleUnassign = async (shiftId) => {
     try {
-      await fetch(`${API_URL}/shifts/${shiftId}/assign`, {
+      await fetch(`${API_URL}/shifts/${shiftId}/unassign`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ employeeId: null }),
