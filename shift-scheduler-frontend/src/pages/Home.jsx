@@ -12,10 +12,10 @@ export default function Home() {
           <h1 className="text-4xl md:text-5xl font-bold mb-4">Welcome to Shift Scheduler</h1>
           <p className="text-lg md:text-xl mb-6">Easily manage shifts, schedules, and staff in one place.</p>
           <Link
-            to="/dashboard"
+            to="/signup"
             className="bg-white text-blue-600 font-semibold px-6 py-3 rounded-lg shadow hover:bg-gray-100 transition"
           >
-            Go to Dashboard
+            Join Us Now
           </Link>
         </section>
 
