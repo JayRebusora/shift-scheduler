@@ -27,6 +27,8 @@ export default function AdminShifts() {
       }
     };
     fetchData();
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
   }, [API_URL]);
 
   const handleAssign = async (shiftId) => {
@@ -90,6 +92,7 @@ export default function AdminShifts() {
               <th className="border px-4 py-2 text-left">Date</th>
               <th className="border px-4 py-2 text-left">Time</th>
               <th className="border px-4 py-2 text-left">Assigned</th>
+               <th className="border px-4 py-2 text-left">Status</th>
               <th className="border px-4 py-2 text-left">Action</th>
             </tr>
           </thead>
@@ -105,6 +108,9 @@ export default function AdminShifts() {
                 </td>
                 <td className="border px-4 py-2">
                   {shift.assignedTo ? shift.assignedTo.name : "Not assigned"}
+                </td>
+                <td className="border px-4 py-2">
+                  {shift.status}
                 </td>
                 <td className="border px-4 py-2">
                   {shift.assignedTo ? (
