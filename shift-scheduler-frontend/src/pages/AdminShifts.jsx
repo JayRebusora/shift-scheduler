@@ -91,6 +91,7 @@ export default function AdminShifts() {
               <th className="border px-4 py-2 text-left">Title</th>
               <th className="border px-4 py-2 text-left">Date</th>
               <th className="border px-4 py-2 text-left">Time</th>
+              <th className="border px-4 py-2 text-left">Location</th>
               <th className="border px-4 py-2 text-left">Assigned</th>
                <th className="border px-4 py-2 text-left">Status</th>
               <th className="border px-4 py-2 text-left">Action</th>
@@ -106,6 +107,7 @@ export default function AdminShifts() {
                   {" - "}
                   {new Date(`1970-01-01T${shift.endTime}`).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                 </td>
+                 <td className="border px-4 py-2">{shift.location}</td>
                 <td className="border px-4 py-2">
                   {shift.assignedTo ? shift.assignedTo.name : "Not assigned"}
                 </td>
